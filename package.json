@@ -1,0 +1,23 @@
+{
+  "name": "ai-citytwin-monorepo",
+  "version": "1.0.0",
+  "description": "AI-CityTwin: An AI-Powered Digital Twin Framework for Predictive Urban Intelligence and What-If Decision Simulation",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "preview": "npm run preview --prefix frontend",
+    "backend": "python -m uvicorn app.main:app --app-dir backend --reload --port 8000",
+    "train": "python ml/pipelines/train_models.py"
+  },
+  "keywords": [
+    "digital-twin",
+    "smart-city",
+    "ai",
+    "machine-learning",
+    "what-if-simulation",
+    "rag",
+    "computer-vision"
+  ],
+  "author": "AI-CityTwin Research Team",
+  "license": "MIT"
+}

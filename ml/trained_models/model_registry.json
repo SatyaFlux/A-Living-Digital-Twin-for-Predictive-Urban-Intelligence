@@ -1,0 +1,98 @@
+{
+  "traffic_models": {
+    "features": [
+      "hour",
+      "day_of_week",
+      "is_weekend",
+      "weather_temp",
+      "precipitation",
+      "event_flag",
+      "lag_1h",
+      "lag_2h",
+      "lag_24h",
+      "rolling_mean_3h"
+    ],
+    "feature_importances": {
+      "hour": 0.0806,
+      "day_of_week": 0.011,
+      "is_weekend": 0.006,
+      "weather_temp": 0.0078,
+      "precipitation": 0.0272,
+      "event_flag": 0.0053,
+      "lag_1h": 0.0152,
+      "lag_2h": 0.0683,
+      "lag_24h": 0.2981,
+      "rolling_mean_3h": 0.4806
+    },
+    "models": {
+      "LinearRegression": {
+        "mae": 11.403,
+        "rmse": 13.632,
+        "mape": 27.5,
+        "r2": 0.3342,
+        "status": "Baseline"
+      },
+      "RandomForest": {
+        "mae": 2.541,
+        "rmse": 3.396,
+        "mape": 6.24,
+        "r2": 0.9587,
+        "status": "Candidate"
+      },
+      "GradientBoosting_XGB": {
+        "mae": 1.912,
+        "rmse": 2.581,
+        "mape": 4.63,
+        "r2": 0.9761,
+        "status": "Active Champion"
+      },
+      "Ridge_Sequence": {
+        "mae": 11.546,
+        "rmse": 13.83,
+        "mape": 27.72,
+        "r2": 0.3147,
+        "status": "Backup"
+      }
+    }
+  },
+  "aqi_model": {
+    "features": [
+      "hour",
+      "wind_speed",
+      "temperature",
+      "traffic_load",
+      "lag_1h",
+      "lag_3h"
+    ],
+    "mae": 4.993,
+    "rmse": 6.256,
+    "mape": 6.81,
+    "r2": 0.8298,
+    "algorithm": "GradientBoosting"
+  },
+  "energy_model": {
+    "features": [
+      "hour",
+      "is_weekend",
+      "temperature",
+      "occupancy_rate",
+      "lag_1h"
+    ],
+    "mae": 2.562,
+    "rmse": 3.269,
+    "mape": 4.12,
+    "r2": 0.9878,
+    "algorithm": "RandomForest"
+  },
+  "anomaly_detector": {
+    "algorithm": "IsolationForest",
+    "contamination": 0.03,
+    "status": "Active"
+  },
+  "metadata": {
+    "generated_at": "2026-09-05T17:35:39.104420+00:00",
+    "dataset_samples": 2500,
+    "dataset_version": "v1.0-research-benchmarks",
+    "is_demo_data": true
+  }
+}
