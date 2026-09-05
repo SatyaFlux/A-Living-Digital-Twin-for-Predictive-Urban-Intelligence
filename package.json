@@ -2,6 +2,9 @@
   "name": "ai-citytwin-monorepo",
   "version": "1.0.0",
   "description": "AI-CityTwin: An AI-Powered Digital Twin Framework for Predictive Urban Intelligence and What-If Decision Simulation",
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
     "dev": "npm run dev --prefix frontend",
     "build": "npm run build --prefix frontend",
