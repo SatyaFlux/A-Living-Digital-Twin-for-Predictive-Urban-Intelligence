@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   ShieldCheck, EyeOff, Lock, Database,
-  FileCheck, AlertCircle, CheckCircle2
+  FileCheck
 } from 'lucide-react';
 
 export const PrivacyEthicsPage: React.FC = () => {

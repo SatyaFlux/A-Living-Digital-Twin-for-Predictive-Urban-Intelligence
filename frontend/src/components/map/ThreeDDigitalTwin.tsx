@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { BuildingAsset, RoadAsset } from '../../types';
-import { RotateCw, ZoomIn, ZoomOut, Layers, Info } from 'lucide-react';
+import { Layers } from 'lucide-react';
 
 interface ThreeDDigitalTwinProps {
   buildings: BuildingAsset[];
@@ -56,7 +56,7 @@ export const ThreeDDigitalTwin: React.FC<ThreeDDigitalTwinProps> = ({
     scene.add(gridHelper);
 
     // Render 3D Road Corridors
-    roads.forEach((r, idx) => {
+    roads.forEach((r) => {
       const startX = (r.start_lng - 77.21) * 3000;
       const startZ = (r.start_lat - 28.61) * 3000;
       const endX = (r.end_lng - 77.21) * 3000;
@@ -81,7 +81,7 @@ export const ThreeDDigitalTwin: React.FC<ThreeDDigitalTwinProps> = ({
 
     // Render 3D Extruded Buildings
     const buildingMeshes: THREE.Mesh[] = [];
-    buildings.forEach((b, idx) => {
+    buildings.forEach((b) => {
       const x = (b.longitude - 77.21) * 3000;
       const z = (b.latitude - 28.61) * 3000;
       const height = Math.max(8, (b.floor_area_sqm / 5000) * 16);

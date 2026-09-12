@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ModelMetric } from '../types';
 import { api } from '../services/api';
-import {
-  LineChart, Activity, ShieldCheck, CheckCircle2,
-  AlertTriangle, Cpu, Database
-} from 'lucide-react';
+import { Cpu } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell
 } from 'recharts';
 
 export const ModelMonitoringPage: React.FC = () => {
   const [metrics, setMetrics] = useState<ModelMetric[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -20,8 +16,6 @@ export const ModelMonitoringPage: React.FC = () => {
         setMetrics(data);
       } catch (e) {
         console.warn('Model metrics fetch error:', e);
-      } finally {
-        setLoading(false);
       }
     };
     fetchMetrics();

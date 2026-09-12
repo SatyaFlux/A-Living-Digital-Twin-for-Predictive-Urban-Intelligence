@@ -5,7 +5,7 @@ import {
 } from '../../types';
 import {
   Layers, Car, Wind, Zap, Droplets,
-  AlertTriangle, Shield, CheckCircle2, ChevronRight
+  AlertTriangle
 } from 'lucide-react';
 
 export type MapLayer = 'traffic' | 'aqi' | 'energy' | 'water' | 'risk';
@@ -288,6 +288,25 @@ export const DigitalTwinMap: React.FC<DigitalTwinMapProps> = ({
             </g>
           )}
 
+          {/* Water Infrastructure Layer */}
+          {activeLayers.water && waterNodes && (
+            <g className="water-layer">
+              {waterNodes.map((w, idx) => {
+                const b = buildings[idx % buildings.length] || buildings[0];
+                const [x, y] = mapToSvg(b.latitude - 0.004, b.longitude + 0.003);
+                return (
+                  <g key={w.id} className="cursor-pointer" onClick={() => setSelectedEntity({ type: 'water', data: w })}>
+                    <circle cx={x} cy={y} r="12" fill="rgba(14, 165, 233, 0.2)" stroke="#0ea5e9" strokeWidth="1.5" />
+                    <circle cx={x} cy={y} r="4" fill="#0ea5e9" />
+                    <text x={x} y={y + 16} textAnchor="middle" fill="#38bdf8" fontSize="8" fontWeight="bold">
+                      {w.pressure_bar} bar
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          )}
+
           {/* Risk & Anomaly Markers */}
           {activeLayers.risk && (
             <g className="risk-layer">
@@ -308,6 +327,17 @@ export const DigitalTwinMap: React.FC<DigitalTwinMapProps> = ({
             </g>
           )}
         </svg>
+
+        {/* Live Weather Overlay */}
+        {weather && (
+          <div className="absolute top-4 right-4 z-10 hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] text-slate-300 backdrop-blur-md">
+            <Wind className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{weather.condition}</span>
+            <span className="font-mono text-cyan-300">{weather.temperature_c}°C</span>
+            <span className="text-slate-600">|</span>
+            <span className="text-slate-400">{weather.wind_speed_kmh} km/h</span>
+          </div>
+        )}
 
         {/* Selected Entity Popup Overlay */}
         {selectedEntity && (

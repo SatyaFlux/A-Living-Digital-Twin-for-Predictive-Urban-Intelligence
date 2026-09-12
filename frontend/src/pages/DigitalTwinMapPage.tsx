@@ -6,7 +6,7 @@ import {
   WeatherData, AnomalyItem
 } from '../types';
 import { api } from '../services/api';
-import { Map, Layers, Box, Info } from 'lucide-react';
+import { Map, Box } from 'lucide-react';
 import { DataBadge } from '../components/common/DataBadge';
 
 export const DigitalTwinMapPage: React.FC = () => {
@@ -17,7 +17,6 @@ export const DigitalTwinMapPage: React.FC = () => {
   const [waterNodes, setWaterNodes] = useState<WaterNode[]>([]);
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [anomalies, setAnomalies] = useState<AnomalyItem[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,8 +30,6 @@ export const DigitalTwinMapPage: React.FC = () => {
         setAnomalies(state.anomalies);
       } catch (e) {
         console.warn('Digital Twin sync fallback:', e);
-      } finally {
-        setLoading(false);
       }
     };
     fetchData();

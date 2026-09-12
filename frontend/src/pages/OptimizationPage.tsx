@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { OptimizationResult } from '../types';
 import { api } from '../services/api';
+import { Cpu, Sliders } from 'lucide-react';
 import {
-  Cpu, Sliders, CheckCircle2, ShieldCheck,
-  TrendingDown, Zap, Car, Wind, Clock, Sparkles
-} from 'lucide-react';
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
 
-export const OptimizationPage: React.FC = () => {
-  const [weights, setWeights] = useState<Record<string, number>>({
-    congestion: 0.35,
-    energy: 0.25,
-    emissions: 0.25,
-    response_time: 0.15
-  });
+const DEFAULT_WEIGHTS: Record<string, number> = {
+  congestion: 0.35,
+  energy: 0.25,
+  emissions: 0.25,
+  response_time: 0.15
+};
 
+export const OptimizationPage: React.FC = () => {
+  const [weights, setWeights] = useState<Record<string, number>>(DEFAULT_WEIGHTS);
   const [result, setResult] = useState<OptimizationResult | null>(null);
   const [solving, setSolving] = useState<boolean>(false);
 
-  const runSolver = async () => {
+  const runSolver = useCallback(async () => {
     setSolving(true);
     try {
       const res = await api.solveOptimization(weights);
@@ -30,10 +28,20 @@ export const OptimizationPage: React.FC = () => {
     } finally {
       setSolving(false);
     }
-  };
+  }, [weights]);
 
   useEffect(() => {
-    runSolver();
+    let isMounted = true;
+    api.solveOptimization(DEFAULT_WEIGHTS)
+      .then((res) => {
+        if (isMounted) setResult(res);
+      })
+      .catch((e) => {
+        console.warn('Optimization solver fallback:', e);
+      });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
-import {
-  FileText, Download, Printer, CheckCircle2,
-  ShieldCheck, AlertTriangle, Cpu, Activity
-} from 'lucide-react';
+import { Download, Printer, Activity } from 'lucide-react';
 
 export const ReportsPage: React.FC = () => {
   const [report, setReport] = useState<any>(null);

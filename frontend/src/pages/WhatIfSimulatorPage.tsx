@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { ScenarioResult } from '../types';
 import { api } from '../services/api';
 import {
-  Sliders, Play, Activity, AlertTriangle, ArrowRight,
-  TrendingUp, TrendingDown, CheckCircle2, ShieldCheck, Sparkles
+  Play, Activity, ShieldCheck, Sparkles
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend

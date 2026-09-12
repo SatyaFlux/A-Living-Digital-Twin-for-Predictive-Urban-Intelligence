@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  Bot, X, Send, Sparkles, ShieldCheck, Database,
-  FileText, Cpu, AlertCircle, CornerDownLeft
+  Bot, X, Send, Sparkles, ShieldCheck, Database
 } from 'lucide-react';
 import { ChatMessage } from '../../types';
 import { api } from '../../services/api';
@@ -16,7 +15,7 @@ const DEFAULT_MESSAGES: ChatMessage[] = [
     id: 'msg_welcome',
     sender: 'assistant',
     text: "Hello! I am **TwinAI**, your grounded Urban Digital Twin Copilot. I analyze real-time multi-node telemetry, time-series ML models, and smart city operational policies. How can I assist your urban decision-making today?",
-    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    timestamp: '12:00 PM',
     suggested_followups: [
       "Why is traffic increasing near Gate 2?",
       "What will traffic look like in 30 minutes?",
@@ -25,6 +24,9 @@ const DEFAULT_MESSAGES: ChatMessage[] = [
     ]
   }
 ];
+
+const createMessageId = (prefix: string) => `${prefix}_${Date.now()}`;
+const getFormattedTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
 export const TwinAIChatDrawer: React.FC<TwinAIChatDrawerProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<ChatMessage[]>(DEFAULT_MESSAGES);
@@ -40,11 +42,12 @@ export const TwinAIChatDrawer: React.FC<TwinAIChatDrawerProps> = ({ isOpen, onCl
     const query = textToSend || input;
     if (!query.trim() || loading) return;
 
+    const timeStr = getFormattedTime();
     const userMsg: ChatMessage = {
-      id: `user_${Date.now()}`,
+      id: createMessageId('user'),
       sender: 'user',
       text: query,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: timeStr
     };
 
     setMessages((prev) => [...prev, userMsg]);
@@ -54,21 +57,21 @@ export const TwinAIChatDrawer: React.FC<TwinAIChatDrawerProps> = ({ isOpen, onCl
     try {
       const response = await api.sendChatMessage(query);
       const aiMsg: ChatMessage = {
-        id: `ai_${Date.now()}`,
+        id: createMessageId('ai'),
         sender: 'assistant',
         text: response.reply,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp: getFormattedTime(),
         sources: response.grounded_sources,
         suggested_followups: response.suggested_followups,
         is_telemetry_backed: response.is_telemetry_backed
       };
       setMessages((prev) => [...prev, aiMsg]);
-    } catch (error) {
+    } catch {
       const errorMsg: ChatMessage = {
-        id: `err_${Date.now()}`,
+        id: createMessageId('err'),
         sender: 'assistant',
         text: "I am unable to query live twin state right now. Please ensure the backend server is active.",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        timestamp: getFormattedTime()
       };
       setMessages((prev) => [...prev, errorMsg]);
     } finally {

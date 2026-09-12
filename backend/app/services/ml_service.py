@@ -2,11 +2,16 @@ import os
 import json
 import joblib
 import numpy as np
+import pandas as pd
 from datetime import datetime, timezone
 from typing import Dict, Any, List
 from app.schemas.schemas import PredictionResponseDTO, PredictionHorizonDTO, ModelMetricDTO
 
 MODEL_DIR = "ml/trained_models"
+TRAFFIC_FEATURE_COLS = [
+    "hour", "day_of_week", "is_weekend", "weather_temp", "precipitation",
+    "event_flag", "lag_1h", "lag_2h", "lag_24h", "rolling_mean_3h"
+]
 
 class MLService:
     def __init__(self):
@@ -35,18 +40,18 @@ class MLService:
         day_of_week = now.weekday()
         is_weekend = 1 if day_of_week >= 5 else 0
         
-        # Features: ["hour", "day_of_week", "is_weekend", "weather_temp", "precipitation", "event_flag", "lag_1h", "lag_2h", "lag_24h", "rolling_mean_3h"]
-        feat = np.array([[
+        # Features DataFrame matching trained model columns
+        feat_df = pd.DataFrame([[
             hour, day_of_week, is_weekend, 28.0, 0.0, 0,
             current_congestion,
             current_congestion * 0.95,
             current_congestion * 0.90,
             current_congestion
-        ]])
+        ]], columns=TRAFFIC_FEATURE_COLS)
         
         # Base model prediction
         if "traffic_gradient_boost" in self.models:
-            pred_base = float(self.models["traffic_gradient_boost"].predict(feat)[0])
+            pred_base = float(self.models["traffic_gradient_boost"].predict(feat_df)[0])
         else:
             pred_base = current_congestion * 1.08
             

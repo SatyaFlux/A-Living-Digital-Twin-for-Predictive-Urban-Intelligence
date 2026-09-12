@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { BuildingAsset, PredictionResponse } from '../types';
 import { api } from '../services/api';
-import {
-  Zap, Activity, AlertTriangle, ShieldCheck,
-  Building, CheckCircle2, BarChart2
-} from 'lucide-react';
+import { AlertTriangle, CheckCircle2 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
@@ -13,34 +10,31 @@ export const EnergyPage: React.FC = () => {
   const [buildings, setBuildings] = useState<BuildingAsset[]>([]);
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingAsset | null>(null);
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchEnergy = async () => {
-      try {
-        const data = await api.getLiveEnergy();
-        setBuildings(data);
-        if (data.length > 0 && !selectedBuilding) {
-          setSelectedBuilding(data[0]);
-          loadPrediction(data[0].id);
-        }
-      } catch (e) {
-        console.warn('Energy fetch error:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchEnergy();
-  }, []);
-
-  const loadPrediction = async (bldId: number) => {
+  const loadPrediction = useCallback(async (bldId: number) => {
     try {
       const pred = await api.getEnergyPrediction(bldId);
       setPrediction(pred);
     } catch (e) {
       console.warn('Energy prediction error:', e);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const fetchEnergy = async () => {
+      try {
+        const data = await api.getLiveEnergy();
+        setBuildings(data);
+        if (data.length > 0) {
+          setSelectedBuilding(data[0]);
+          await loadPrediction(data[0].id);
+        }
+      } catch (e) {
+        console.warn('Energy fetch error:', e);
+      }
+    };
+    fetchEnergy();
+  }, [loadPrediction]);
 
   const handleSelectBuilding = (bld: BuildingAsset) => {
     setSelectedBuilding(bld);

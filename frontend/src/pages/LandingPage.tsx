@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Eye, Activity, Sliders, Cpu, ArrowRight, ShieldCheck,
-  Zap, Wind, Car, Droplets, Database, Layers, Sparkles, CheckCircle2
+  Layers, Sparkles
 } from 'lucide-react';
 import { PageId } from '../components/layout/Sidebar';
 

@@ -9,7 +9,7 @@ import { api } from '../services/api';
 import { PageId } from '../components/layout/Sidebar';
 import {
   Car, Wind, Zap, AlertTriangle, CloudSun,
-  Activity, ArrowRight, ShieldAlert, Sparkles
+  Activity, ShieldAlert, Sparkles
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer

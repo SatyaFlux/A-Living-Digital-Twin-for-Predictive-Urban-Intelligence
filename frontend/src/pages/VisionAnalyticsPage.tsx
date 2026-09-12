@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { CameraFeed } from '../types';
 import { api } from '../services/api';
 import {
-  Camera, Eye, ShieldCheck, Activity,
-  Car, Users, Gauge, Radio
+  Camera, ShieldCheck,
+  Car, Users, Gauge
 } from 'lucide-react';
 import { DataBadge } from '../components/common/DataBadge';
 
 export const VisionAnalyticsPage: React.FC = () => {
   const [selectedCamera, setSelectedCamera] = useState<string>('CAM_01_GATE2');
   const [feed, setFeed] = useState<CameraFeed | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStream = async () => {
@@ -19,8 +18,6 @@ export const VisionAnalyticsPage: React.FC = () => {
         setFeed(data);
       } catch (e) {
         console.warn('Camera stream fetch error:', e);
-      } finally {
-        setLoading(false);
       }
     };
 

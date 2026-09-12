@@ -2,16 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { WaterNode } from '../types';
 import { api } from '../services/api';
 import {
-  Droplets, Activity, AlertTriangle, ShieldCheck,
-  Gauge, Waves, CheckCircle2
-} from 'lucide-react';
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
 
 export const WaterPage: React.FC = () => {
   const [nodes, setNodes] = useState<WaterNode[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchWater = async () => {
@@ -20,8 +15,6 @@ export const WaterPage: React.FC = () => {
         setNodes(data);
       } catch (e) {
         console.warn('Water fetch error:', e);
-      } finally {
-        setLoading(false);
       }
     };
     fetchWater();

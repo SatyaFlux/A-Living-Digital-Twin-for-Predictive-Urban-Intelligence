@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { AirQualityNode, PredictionResponse } from '../types';
 import { api } from '../services/api';
-import {
-  Wind, Activity, AlertTriangle, ShieldCheck,
-  TrendingDown, Sparkles
-} from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, Cell
@@ -14,34 +10,31 @@ export const AirQualityPage: React.FC = () => {
   const [stations, setStations] = useState<AirQualityNode[]>([]);
   const [selectedStation, setSelectedStation] = useState<AirQualityNode | null>(null);
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchAQI = async () => {
-      try {
-        const data = await api.getLiveAirQuality();
-        setStations(data);
-        if (data.length > 0 && !selectedStation) {
-          setSelectedStation(data[0]);
-          loadPrediction(data[0].location_id);
-        }
-      } catch (e) {
-        console.warn('AQI fetch error:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAQI();
-  }, []);
-
-  const loadPrediction = async (locId: number) => {
+  const loadPrediction = useCallback(async (locId: number) => {
     try {
       const pred = await api.getAirQualityPrediction(locId);
       setPrediction(pred);
     } catch (e) {
       console.warn('AQI prediction error:', e);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const fetchAQI = async () => {
+      try {
+        const data = await api.getLiveAirQuality();
+        setStations(data);
+        if (data.length > 0) {
+          setSelectedStation(data[0]);
+          await loadPrediction(data[0].location_id);
+        }
+      } catch (e) {
+        console.warn('AQI fetch error:', e);
+      }
+    };
+    fetchAQI();
+  }, [loadPrediction]);
 
   const handleSelectStation = (st: AirQualityNode) => {
     setSelectedStation(st);

@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 # User Schemas
 class UserBase(BaseModel):
@@ -16,12 +16,11 @@ class UserLogin(BaseModel):
     password: str
 
 class UserResponse(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     is_active: bool
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -30,6 +29,8 @@ class Token(BaseModel):
 
 # Location & Asset Schemas
 class LocationDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     code: str
@@ -38,10 +39,9 @@ class LocationDTO(BaseModel):
     longitude: float
     description: Optional[str] = None
 
-    class Config:
-        from_attributes = True
-
 class RoadDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     code: str
@@ -58,10 +58,9 @@ class RoadDTO(BaseModel):
     current_avg_speed: Optional[float] = 60.0
     current_vehicle_count: Optional[int] = 0
 
-    class Config:
-        from_attributes = True
-
 class BuildingDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     code: str
@@ -76,11 +75,10 @@ class BuildingDTO(BaseModel):
     peak_demand_kw: Optional[float] = 0.0
     is_anomaly: Optional[bool] = False
 
-    class Config:
-        from_attributes = True
-
 # Telemetry Schemas
 class TrafficDataDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     road_id: int
     road_name: Optional[str] = None
@@ -92,10 +90,9 @@ class TrafficDataDTO(BaseModel):
     level_of_service: str
     is_simulated: bool = True
 
-    class Config:
-        from_attributes = True
-
 class AirQualityDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     location_id: int
     location_name: Optional[str] = None
@@ -110,10 +107,9 @@ class AirQualityDTO(BaseModel):
     primary_pollutant: str
     is_simulated: bool = True
 
-    class Config:
-        from_attributes = True
-
 class EnergyDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     building_id: int
     building_name: Optional[str] = None
@@ -125,10 +121,9 @@ class EnergyDTO(BaseModel):
     is_anomaly: bool
     is_simulated: bool = True
 
-    class Config:
-        from_attributes = True
-
 class WaterDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     location_id: int
     location_name: Optional[str] = None
@@ -140,10 +135,9 @@ class WaterDTO(BaseModel):
     is_anomaly: bool
     is_simulated: bool = True
 
-    class Config:
-        from_attributes = True
-
 class WeatherDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     location_id: int
     location_name: Optional[str] = None
@@ -156,9 +150,6 @@ class WeatherDTO(BaseModel):
     condition: str
     visibility_km: float
     is_simulated: bool = True
-
-    class Config:
-        from_attributes = True
 
 # Dashboard Summary Schema
 class KPICardDTO(BaseModel):
@@ -184,6 +175,8 @@ class DashboardOverviewDTO(BaseModel):
 
 # Anomaly Schema
 class AnomalyDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     timestamp: datetime
     entity_type: str
@@ -197,9 +190,6 @@ class AnomalyDTO(BaseModel):
     explanation: str
     recommended_action: str
     status: str
-
-    class Config:
-        from_attributes = True
 
 # Prediction Schemas
 class PredictionHorizonDTO(BaseModel):
@@ -281,6 +271,8 @@ class ChatResponseDTO(BaseModel):
 
 # Model Monitoring Schemas
 class ModelMetricDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     model_name: str
     domain: str
@@ -293,9 +285,6 @@ class ModelMetricDTO(BaseModel):
     drift_score: float
     is_active: bool
     last_trained: datetime
-
-    class Config:
-        from_attributes = True
 
 # Vision Analytics Schemas
 class DetectionObjectDTO(BaseModel):

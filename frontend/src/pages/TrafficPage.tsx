@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { RoadAsset, PredictionResponse } from '../types';
 import { api } from '../services/api';
+import { Activity, BarChart2 } from 'lucide-react';
 import {
-  Car, Activity, Clock, ShieldCheck,
-  TrendingUp, BarChart2, Info
-} from 'lucide-react';
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  BarChart, Bar, Cell
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from 'recharts';
 
 export const TrafficPage: React.FC = () => {
@@ -15,34 +11,31 @@ export const TrafficPage: React.FC = () => {
   const [selectedRoad, setSelectedRoad] = useState<RoadAsset | null>(null);
   const [prediction, setPrediction] = useState<PredictionResponse | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>('GradientBoosting_XGB');
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTraffic = async () => {
-      try {
-        const data = await api.getLiveTraffic();
-        setRoads(data);
-        if (data.length > 0 && !selectedRoad) {
-          setSelectedRoad(data[0]);
-          loadPrediction(data[0].id);
-        }
-      } catch (e) {
-        console.warn('Traffic fetch error:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTraffic();
-  }, []);
-
-  const loadPrediction = async (roadId: number) => {
+  const loadPrediction = useCallback(async (roadId: number) => {
     try {
       const pred = await api.getTrafficPrediction(roadId);
       setPrediction(pred);
     } catch (e) {
       console.warn('Prediction fetch error:', e);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const fetchTraffic = async () => {
+      try {
+        const data = await api.getLiveTraffic();
+        setRoads(data);
+        if (data.length > 0) {
+          setSelectedRoad(data[0]);
+          await loadPrediction(data[0].id);
+        }
+      } catch (e) {
+        console.warn('Traffic fetch error:', e);
+      }
+    };
+    fetchTraffic();
+  }, [loadPrediction]);
 
   const handleSelectRoad = (road: RoadAsset) => {
     setSelectedRoad(road);

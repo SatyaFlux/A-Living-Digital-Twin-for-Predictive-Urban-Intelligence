@@ -212,15 +212,28 @@ tests/test_scenario_engine.py::test_optimization_solver_pareto PASSED    [100%]
 
 ---
 
-## 8. Docker Deployment
+## 8. Development & Local Run
 
-Deploy backend and frontend services via Docker Compose:
+Run the unified local stack or start services individually:
 
 ```bash
-docker compose up --build
+# Windows
+.\scripts\start_dev.bat
+
+# Linux / macOS
+bash ./scripts/start_dev.sh
 ```
-- Access Frontend on `http://localhost:3000`
-- Access Backend on `http://localhost:8000`
+
+Or run services separately:
+```bash
+# Backend (FastAPI on Port 8000)
+python -m uvicorn app.main:app --app-dir backend --reload --port 8000
+
+# Frontend (Vite on Port 5173)
+npm run dev --prefix frontend
+```
+- Access Frontend on `http://localhost:5173`
+- Access Backend API & Docs on `http://localhost:8000/docs`
 
 ---
 

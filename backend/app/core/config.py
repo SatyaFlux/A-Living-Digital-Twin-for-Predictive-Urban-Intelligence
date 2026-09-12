@@ -1,8 +1,10 @@
 import os
 from typing import List
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(case_sensitive=True, env_file=".env", extra="ignore")
+
     PROJECT_NAME: str = "AI-CityTwin"
     PROJECT_TITLE: str = "AI-CityTwin: An AI-Powered Digital Twin Framework for Predictive Urban Intelligence and What-If Decision Simulation"
     TAGLINE: str = "Observe. Predict. Simulate. Decide."
@@ -25,9 +27,5 @@ class Settings(BaseSettings):
     
     # Demo flag
     IS_DEMO_MODE: bool = True
-    
-    class Config:
-        case_sensitive = True
-        env_file = ".env"
 
 settings = Settings()

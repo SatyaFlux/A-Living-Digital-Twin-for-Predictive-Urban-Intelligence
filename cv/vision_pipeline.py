@@ -1,7 +1,5 @@
-import random
-import time
 import math
-from typing import List, Dict, Any
+from typing import List
 from app.schemas.schemas import CameraFeedDTO, DetectionObjectDTO
 
 class VisionPipeline:

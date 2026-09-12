@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { UserRole } from '../../types';
 import {
-  Activity, Shield, User as UserIcon, Sun, Moon,
+  Activity, Shield, Sun, Moon,
   Bot, Menu, Radio, Sparkles
 } from 'lucide-react';
 import { DataBadge } from '../common/DataBadge';
@@ -14,7 +14,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar, onOpenChat }) => {
-  const { user, role, loginAs } = useAuth();
+  const { role, loginAs } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   return (

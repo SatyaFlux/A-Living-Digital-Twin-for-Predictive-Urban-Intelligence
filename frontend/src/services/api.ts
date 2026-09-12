@@ -1,8 +1,7 @@
 import {
   DashboardOverview, RoadAsset, BuildingAsset, AirQualityNode,
   WaterNode, WeatherData, AnomalyItem, PredictionResponse,
-  ScenarioResult, OptimizationResult, CameraFeed, ModelMetric,
-  ChatMessage
+  ScenarioResult, OptimizationResult, CameraFeed, ModelMetric
 } from '../types';
 
 const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8000/api/v1';
